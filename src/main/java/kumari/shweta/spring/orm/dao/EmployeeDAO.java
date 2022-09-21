@@ -3,6 +3,9 @@
  */
 package kumari.shweta.spring.orm.dao;
 
+import java.awt.List;
+import java.util.ArrayList;
+
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +32,31 @@ public class EmployeeDAO {
 		
 	}
 
+	//For read operation @Transactional annotation not required 
+	
+	public EmployeeDTO getEmployee(int employeeId) {
+		EmployeeDTO employeeDTO = this.hibernateTemplate.get(EmployeeDTO.class,employeeId);
+		return employeeDTO;
+	}
+	
+	public ArrayList<EmployeeDTO> getALLEmployee() {
+		ArrayList<EmployeeDTO> list=  (ArrayList<EmployeeDTO>) this. hibernateTemplate.loadAll(EmployeeDTO.class);
+		return list;
+	}
+	
+	//delete operation -->Write operation need to annotate with @Transactional
+	@Transactional
+	public void deleteRecord(int id) {
+		EmployeeDTO employeeDTO = this.hibernateTemplate.get(EmployeeDTO.class, id);
+		this.hibernateTemplate.delete(id);
+	}
+	
+	//update operation
+	@Transactional
+	public void updatingRecord(EmployeeDTO employeeDTO) {
+		
+		this.hibernateTemplate.update(employeeDTO);
+	}
 	public HibernateTemplate getHibernateTemplate() {
 		return hibernateTemplate;
 	}
